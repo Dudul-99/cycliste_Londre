@@ -18,6 +18,9 @@ library(gtsummary)
 library(readr)
 library(kaggler)
 library(dlookr)
+library(lubridate)
+library(tidyverse)
+library(writexl)
 ```
 
 
@@ -38,12 +41,110 @@ rm(response,unzip_result)
 
 
 
+# Exploration des données
+
+## Oberservation du dataset
+```{r}
+dim(london)
+```
+
+## Observation des variables
+
+```{r}
+london %>% 
+  diagnose()
+```
+
+## Modification du format des variables
+
+```{r}
+london$season<-as_factor(london$season)
+london$weather_code<-as_factor(london$weather_code)
+london$is_weekend<-as_factor(london$is_weekend)
+london$is_holiday<-as_factor(london$is_holiday)
+```
+
+## Vérification
+```{r}
+str(london)
+```
 
 
 
+## Affectation des valeurs réel à la place du codage dans les variables
+
+
+```{r}
+london<-
+  london %>% mutate(
+  weather_code =case_when(
+    weather_code==1 ~ 'Dégagé',
+    weather_code==2 ~ 'Nuages épars',
+    weather_code==3 ~ 'Nuages morcelés',
+    weather_code==4 ~ 'Nuageux',
+    weather_code==7 ~ 'Pluie',
+    weather_code==10 ~ 'Pluie avec orage',
+    weather_code==26 ~ 'Chutes de neige'
+    ),
+  season=case_when(
+    season==0 ~ 'printemps',
+    season==1 ~ 'été',
+    season==2 ~ 'automne',
+    season==3 ~ 'hiver',
+  ),
+  is_weekend=case_when(
+    is_weekend==0 ~ 'Non',
+    is_weekend==1 ~ 'Oui'
+  ),
+  is_holiday=case_when(
+    is_holiday==0 ~ 'Non',
+    is_holiday==1 ~ 'Oui'
+  )
+)
+```
 
 
 
+```{r}
+london
+```
+
+## Mise en pourcentage de hum
+
+```{r}
+london$hum<-london$hum/100
+```
+
+
+
+# Renonnage des variables avant sauvegarde
+
+```{r}
+london<-london %>% 
+  rename(
+    temps=timestamp,
+    nombre=cnt,
+    temp_real=t1,
+    temp_ressenti=t2,
+    humidite=hum,
+    meteo=weather_code,
+    vacance=is_holiday,
+    weekend=is_weekend,
+    saison=season,
+    vitesse_vent=wind_speed
+  )
+```
+
+
+```{r}
+london
+```
+
+# Sauvegarde du dataframe pour aller sur Tableau
+
+```{r}
+write_xlsx(london, "/Users/abdul/Desktop/R_data_science/R_data/london_bikes.xlsx")
+```
 
 
 
