@@ -9,22 +9,41 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+# Import des packages
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+# Ici on lance les library qui nous seront utile pour le travail des données ainsi que l'interraction avec l'api de Kaggle
+library(dplyr)
+library(gtsummary)
+library(readr)
+library(kaggler)
+library(dlookr)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+# Import des données
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+## Kaggle api
+
+```{r}
+kgl_auth(creds_file = '/Users/abdul/Desktop/R_data_science/kaggle/kaggle.json')
+response <- kgl_datasets_download_all(owner_dataset = "hmavrodiev/london-bike-sharing-dataset")
+
+download.file(response[["url"]], "data/temp.zip", mode="wb")
+unzip_result <- unzip("data/temp.zip", exdir = "data/", overwrite = TRUE)
+london <- read_csv("data/london_merged.csv")
+rm(response,unzip_result)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+
+
+
+
+
+
+
+
+
