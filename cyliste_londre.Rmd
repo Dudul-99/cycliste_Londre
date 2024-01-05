@@ -21,6 +21,7 @@ library(dlookr)
 library(lubridate)
 library(tidyverse)
 library(writexl)
+library(openxlsx)
 ```
 
 
@@ -143,7 +144,9 @@ london
 # Sauvegarde du dataframe pour aller sur Tableau
 
 ```{r}
-write_xlsx(london, "/Users/abdul/Desktop/R_data_science/R_data/london_bikes.xlsx")
+
+write.xlsx(london, "/Users/abdul/Desktop/R_data_science/R_data/london_bikes.xlsx", sheetName = "data")
+
 ```
 
 
