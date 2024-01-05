@@ -22,6 +22,7 @@ library(lubridate)
 library(tidyverse)
 library(writexl)
 library(openxlsx)
+library(janitor)
 ```
 
 
@@ -148,6 +149,22 @@ london
 write.xlsx(london, "/Users/abdul/Desktop/R_data_science/R_data/london_bikes.xlsx", sheetName = "data")
 
 ```
+
+
+# Observation  de certaines valeurs
+
+
+```{r}
+london %>% 
+  tabyl(meteo) %>% 
+  arrange(desc(n))
+
+london %>% 
+  tabyl(saison) %>% 
+  arrange(desc(n))
+```
+
+
 
 
 
